@@ -8,7 +8,9 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.lmy.helloweather.R
 import com.lmy.helloweather.WeatherApplication
 import com.lmy.helloweather.customview.GrayFrameLayout
@@ -22,10 +24,11 @@ import com.lmy.helloweather.databinding.ActivityWeaTherBinding
  * @User Lmy
  * @Compony JinAnChang
  */
-abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
 
     protected var mContext: Activity? = null
     protected var mViewModel: VM? = null
+    protected lateinit var binding: VDB
 
     //加载类型是否是上拉加载
     protected var isLoading = false
@@ -35,15 +38,9 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
 
     //分页一页大小
     protected var pageSize = 20
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(layoutId())
-        setContentView()
-
-
-
-
+        binding = DataBindingUtil.setContentView(this, layoutId())
         mContext = this
         StatusBarUtil.setRootViewFitsSystemWindows(this, true)
         /**
@@ -98,14 +95,9 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
 
 
     /**
-     *初始化布局
+     * 布局文件id
      */
-    open fun setContentView() {}
-
-//    /**
-//     * 布局文件id
-//     */
-//    abstract fun layoutId(): Int
+    abstract fun layoutId(): Int
 
     /**
      * 初始化布局前的准备

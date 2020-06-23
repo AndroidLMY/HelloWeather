@@ -67,20 +67,16 @@ class PlaceFragment : BaseFragment<PlaceViewModle>() {
             })
         }
     }
-
     fun save(place: PlaceResponse.Place) {
         mViewModel?.savePlace(place)
     }
-
     override fun initNet() {
         mViewModel?.getData(searchPlaceEdit.text.toString(), {}, {}) {
         }
     }
-
     override fun showProgress() {
         super.showProgress()
     }
-
     override fun hideProgress() {
         super.hideProgress()
     }

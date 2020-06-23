@@ -28,12 +28,9 @@ import kotlinx.android.synthetic.main.now.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WeaTherActivity : BaseActivity<WeatherViewModle>() {
-    lateinit var binding: ActivityWeaTherBinding
+class WeaTherActivity : BaseActivity<ActivityWeaTherBinding, WeatherViewModle>() {
     override fun providerVMClass() = WeatherViewModle::class.java
-    override fun setContentView() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_wea_ther)
-    }
+    override fun layoutId(): Int = R.layout.activity_wea_ther
 
     override fun initView() {
         StatusBarUtil.setRootViewFitsSystemWindows(this, false)
@@ -135,4 +132,5 @@ class WeaTherActivity : BaseActivity<WeatherViewModle>() {
         }
         weatherLayout.visibility = View.VISIBLE
     }
+
 }
