@@ -83,21 +83,18 @@ class PlaceFragment : BaseFragment<PlaceViewModle>() {
 
     override fun finishCreateView(state: Bundle?) {
         GlobalScope.launch(Dispatchers.Main) {
-
             getNumber()
             "SSS执行完毕1".e()
             getNumber()
             "SSS执行完毕2".e()
             getNumber()
             "SSS执行完毕3".e()
-
-
         }
     }
 
     suspend fun getNumber() {
         withContext(Dispatchers.IO) {
-            for (num in 1..100) {
+            for (num in 1..10) {
                 "AAA$num".e()
             }
         }

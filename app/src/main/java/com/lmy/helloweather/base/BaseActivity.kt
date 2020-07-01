@@ -62,15 +62,8 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppComp
         initNet()
     }
 
-    override fun onCreateView(
-        name: String,
-        context: Context,
-        attrs: AttributeSet
-    ): View? {
-        /**
-         * 为所有app界面添加灰度主题
-         *
-         */
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+        /*为所有app界面添加灰度主题*/
         if (WeatherApplication.isGrayTheme) if ("FrameLayout".equals(name)) {
             val count = attrs.getAttributeCount();
             for (i in 0..count) {

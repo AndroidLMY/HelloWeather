@@ -15,12 +15,15 @@ class WeatherApplication : Application() {
 
     companion object {
         lateinit var context: Context
+
+        //设置全局灰度
         var isGrayTheme = false
         const val TOKEN = "5u6uTQzJsFwR=xZW"
     }
 
     init {
-        LogUtils.init("GetData", true)//初始化LogUtil工具类
+        //初始化LogUtil工具类
+        LogUtils.init("GetData", true)
     }
 
     override fun onCreate() {

@@ -7,7 +7,6 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 open class BaseViewModel : ViewModel(), LifecycleObserver, CoroutineScope {
-
     override val coroutineContext: CoroutineContext get() = Dispatchers.Main
     private val mLaunchManager: MutableList<Job> = mutableListOf()
 
@@ -70,8 +69,10 @@ open class BaseViewModel : ViewModel(), LifecycleObserver, CoroutineScope {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestory() {
         "ViewModle onDestory".e()
+        viewModelScope.cancel()
         clearLaunchTask()
     }
+
     private fun clearLaunchTask() {
         mLaunchManager.clear()
     }
