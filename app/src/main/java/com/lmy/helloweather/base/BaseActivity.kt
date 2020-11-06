@@ -2,21 +2,22 @@ package com.lmy.helloweather.base
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import android.util.AttributeSet
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewbinding.ViewBinding
-import com.lmy.helloweather.R
 import com.lmy.helloweather.WeatherApplication
 import com.lmy.helloweather.customview.GrayFrameLayout
 import com.lmy.helloweather.utils.bar_utils.StatusBarUtil
 import com.lmy.helloweather.customview.dialog.LoadingDialog
-import com.lmy.helloweather.databinding.ActivityWeaTherBinding
+import com.lmy.helloweather.utils.setGaryTheme
 
 /**
  * @功能:
@@ -24,24 +25,40 @@ import com.lmy.helloweather.databinding.ActivityWeaTherBinding
  * @User Lmy
  * @Compony JinAnChang
  */
-abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
-
+abstract class BaseActivity<VM : BaseViewModel>(isDataBinding: Boolean = true) :
+    AppCompatActivity() {
+    //是否要使用DataBinding
+    protected open val isBinding = isDataBinding
     protected var mContext: Activity? = null
-    protected var mViewModel: VM? = null
-    protected lateinit var binding: VDB
-
-    //加载类型是否是上拉加载
-    protected var isLoading = false
-
-    //分页的页码
-    protected var pageNumber = 1
-
-    //分页一页大小
-    protected var pageSize = 20
+    protected lateinit var mViewModel: VM
+    protected lateinit var binding: ViewDataBinding
+    protected var isFirstRequest: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, layoutId())
+        initDataBinding()
+        mViewModel = initVM()
+        lifecycle.addObserver(mViewModel!!)
         mContext = this
+        initStyle();
+        initView()
+        initObserve()
+        if (isFirstRequest) {
+            initData()
+        }
+    }
+
+    private fun initDataBinding() {
+        if (isBinding) {
+            val id: Int = layoutId();
+            binding = DataBindingUtil.setContentView(this, layoutId())
+        } else
+            setContentView(layoutId())
+    }
+
+    /**
+     * 初始化Activity的界面风格
+     */
+    private fun initStyle() {
         StatusBarUtil.setRootViewFitsSystemWindows(this, true)
         /**
          * 设置状态栏透明StatusBarUtil.setTranslucentStatus(this);
@@ -55,34 +72,16 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppComp
              */
             StatusBarUtil.setStatusBarColor(this, 0x55000000)
         }
-        prepareBeforeInitView()
-        initView()
-        initVM()
-        initObserve()
-        initNet()
     }
 
+    /**
+     * 重写onCreateView
+     * 用于设置是否要增加全局灰度的主题
+     */
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        /*为所有app界面添加灰度主题*/
-        if (WeatherApplication.isGrayTheme) if ("FrameLayout".equals(name)) {
-            val count = attrs.getAttributeCount();
-            for (i in 0..count) {
-                val attributeName = attrs.getAttributeName(i);
-                val attributeValue = attrs.getAttributeValue(i);
-                if (attributeName.equals("id")) {
-                    val id = Integer.parseInt(attributeValue.substring(1));
-                    val idVal = getResources().getResourceName(id);
-                    if ("android:id/content".equals(idVal)) {
-                        val grayFrameLayout =
-                            GrayFrameLayout(
-                                context,
-                                attrs
-                            );
-                        return grayFrameLayout;
-                    }
-                }
-            }
-        }
+        //添加灰度主题
+        if (WeatherApplication.isGrayTheme)
+            setGaryTheme(window)
         return super.onCreateView(name, context, attrs)
     }
 
@@ -93,46 +92,29 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppComp
     abstract fun layoutId(): Int
 
     /**
-     * 初始化布局前的准备
+     *初始化ViewModle
      */
-    open fun prepareBeforeInitView() {}
+    abstract fun initVM(): VM
+
 
     /**
      *初始化view
      */
-    open fun initView() {}
-
-    /**
-     * 初始化网络数据
-     */
-    open fun initNet() {}
+    abstract fun initView()
 
     /**
      * 初始化订阅监听
      */
-    open fun initObserve() {}
+    abstract fun initObserve()
 
     /**
-     *初始化ViewModle
+     * 初始化数据
      */
-    private fun initVM() {
-        providerVMClass()?.let { it ->
-            mViewModel = ViewModelProvider(this).get(it)
-            lifecycle.addObserver(mViewModel!!)
-        }
-    }
-
-
-    /**
-     * [BaseViewModel]的实现类
-     */
-    open fun providerVMClass(): Class<VM>? = null
-
+    open fun initData() {}
 
     override fun onDestroy() {
         mViewModel?.let {
             lifecycle.removeObserver(it)
-//            it.onDestory()
         }
         super.onDestroy()
         mContext = null
@@ -158,7 +140,6 @@ abstract class BaseActivity<VDB : ViewDataBinding, VM : BaseViewModel> : AppComp
             loadingDialog?.apply {
                 cancel()
                 hisLoading()
-
             }
         }
     }

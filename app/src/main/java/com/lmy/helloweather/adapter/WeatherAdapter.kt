@@ -7,8 +7,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lmy.helloweather.R
 import com.lmy.helloweather.databinding.ForecastItemBinding
-import com.lmy.helloweather.logic.model.WeatherList
-import com.lmy.helloweather.logic.model.getSky
+import com.lmy.helloweather.model.WeatherList
+import com.lmy.helloweather.model.getSky
 import java.text.SimpleDateFormat
 import java.util.*
 

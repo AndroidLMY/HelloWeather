@@ -6,7 +6,7 @@
 
         <variable
             name="weather"
-            type="com.lmy.helloweather.logic.model.Weather" />
+            type="com.lmy.helloweather.model.Weather" />
 
         <variable
             name="cityname"
@@ -19,8 +19,6 @@
         <variable
             name="nowbg"
             type="int" />
-
-
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -49,14 +47,15 @@
                     <include
                         layout="@layout/now"
                         bind:cityname="@{cityname}"
-                        bind:sky="@{sky}"
                         bind:nowbg="@{nowbg}"
+                        bind:sky="@{sky}"
                         bind:weather="@{weather}" />
 
                     <include layout="@layout/forecast" />
+
                     <include
-                        bind:weather="@{weather}"
-                        layout="@layout/life_index" />
+                        layout="@layout/life_index"
+                        bind:weather="@{weather}" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -71,7 +70,7 @@
 
             <fragment
                 android:id="@+id/placeFragment"
-                android:name="com.lmy.helloweather.ui.place.PlaceFragment"
+                android:name="com.lmy.helloweather.ui.fragment.PlaceFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="25dp" />

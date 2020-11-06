@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.lmy.helloweather.R
-import com.lmy.helloweather.logic.model.PlaceResponse
-import com.lmy.helloweather.ui.place.PlaceFragment
-import com.lmy.helloweather.ui.weather.WeaTherActivity
+import com.lmy.helloweather.model.Place
+import com.lmy.helloweather.ui.fragment.PlaceFragment
+import com.lmy.helloweather.ui.activity.WeaTherActivity
 import com.lmy.helloweather.utils.startActivitys
 import kotlinx.android.synthetic.main.activity_wea_ther.*
 
 class PlaceAdapter(
     private val fragment: PlaceFragment,
-    private val placeList: List<PlaceResponse.Place>
+    private val placeList: List<Place>
 ) : RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,7 +35,7 @@ class PlaceAdapter(
             if (activity is WeaTherActivity) {
                 activity.drawerLayout.closeDrawers()
                 activity.setmodleData(place.location.lng, place.location.lat, place.name)
-                activity.initNet()
+                activity.initData()
             } else {
                 startActivitys<WeaTherActivity> {
                     putExtra("lng", place.location.lng)

@@ -12,12 +12,9 @@ import com.lmy.helloweather.utils.LogUtils
  * @Compony 永远相信美好的事物即将发生
  */
 class WeatherApplication : Application() {
-
     companion object {
         lateinit var context: Context
-
-        //设置全局灰度
-        var isGrayTheme = false
+        var isGrayTheme = false //设置全局灰度
         const val TOKEN = "5u6uTQzJsFwR=xZW"
     }
 

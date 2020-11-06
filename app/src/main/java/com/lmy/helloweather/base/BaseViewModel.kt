@@ -1,15 +1,20 @@
 package com.lmy.helloweather.base
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.lmy.helloweather.utils.e
 import kotlinx.coroutines.*
+import com.lmy.helloweather.model.Result
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * @author lmy
+ * @功能: ViewModel层的顶层封装
+ * @Creat 2020/11/6 10:37 AM
+ * @Compony 465008238@qq.com
+ */
 open class BaseViewModel : ViewModel(), LifecycleObserver, CoroutineScope {
     override val coroutineContext: CoroutineContext get() = Dispatchers.Main
     private val mLaunchManager: MutableList<Job> = mutableListOf()
-
 
     /**
      * tryBlock 数据请求函数参数
@@ -76,4 +81,20 @@ open class BaseViewModel : ViewModel(), LifecycleObserver, CoroutineScope {
     private fun clearLaunchTask() {
         mLaunchManager.clear()
     }
+
+
+    /**
+     * 检查返回的Result成功或者失败
+     */
+    open fun <T : Any> checkResult(result: Result<T>, success: (T?) -> Unit, error: (String?) -> Unit) {
+        if (result is Result.Success) {
+            success(result.data)
+        } else if (result is Result.Error) {
+            error(result.exception.message)
+        }
+    }
+
+
 }
+
+

@@ -1,10 +1,8 @@
 package com.lmy.helloweather.logic.network.api
 
 import com.lmy.helloweather.WeatherApplication
-import com.lmy.helloweather.logic.model.PlaceResponse
-import com.lmy.helloweather.logic.model.Weather
-import kotlinx.coroutines.Deferred
-import retrofit2.Call
+import com.lmy.helloweather.model.DataWeatherResponse
+import com.lmy.helloweather.model.Place
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -16,12 +14,5 @@ import retrofit2.http.Query
  */
 interface PlaceApi {
     @GET("v2/place?token=${WeatherApplication.TOKEN}&lang=zh_CN")
-    fun serchPlace(@Query("query") query: String): Call<PlaceResponse>
-
-
-    @GET("v2/place?token=${WeatherApplication.TOKEN}&lang=zh_CN")
-    fun serchPlace2(@Query("query") query: String): Deferred<PlaceResponse>
-
-
-
+    suspend fun serchPlace(@Query("query") query: String): DataWeatherResponse<List<Place>>
 }

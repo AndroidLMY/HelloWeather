@@ -31,6 +31,7 @@
         <!-- 设置背景模糊的透明度-->
         <item name="android:backgroundDimAmount">0.5</item>
     </style>
+
     <style name="bg">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -42,5 +43,13 @@
         <item name="android:layout_width">@dimen/def_height</item>
         <item name="android:layout_height">@dimen/def_height</item>
         <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
+
+    <style name="SplashTheme" parent="AppTheme">
+        <!-- 将splash图片设置在这，这样这张图片取代白屏 -->
+        <item name="android:windowBackground">@drawable/splash_logo</item>
+
+        <item name="android:configChanges">keyboardHidden|orientation</item>
     </style>
 </resources>
